@@ -12,12 +12,12 @@ Web app using flask. Continuation of build-a-blog.
 
 The app must meet several requirements:
 
-* List all users on homepage 
-* List all previous blog entries in reverse-chronological order
+* List all _users_ on homepage 
+* List all _previous blog entries_ in reverse-chronological order
 * Users must be _signed in_ before creating a new blog entry
-* Users can log in 
-* New users can register 
-* Display the individual blog entry after creation
+* Users can _log in_
+* New users can _register_ 
+* Display the _individual blog entry_ after creation
 * Include a _menu bar_ with available commands
 
 ### Routes
