@@ -20,7 +20,12 @@ The app must meet several requirements:
 * Display the _individual blog entry_ after creation
 * Include a _menu bar_ with available commands
 
-### Routes
+## User Scenarios
+* User enters a username that is stored in the database with the correct password and is redirected to the /newpost page with their username being stored in a session
+* User enters a username that is stored in the database with an incorrect password and is redirected to the /login page with a message that their password is incorrect
+* User tries to login with a username that is not stored in the database and is redirected to the /login page with a message that this username does not exist 
+
+## Routes
 * **"/"** - GET: Display list of all users 
 * **"/blog"** - GET: Display list of all blog posts in reverse-chronological order 
 * **"/blog?user=username"** - GET: Display blog entries for specific user 
