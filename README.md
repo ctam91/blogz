@@ -21,9 +21,9 @@ The app must meet several requirements:
 * Include a _menu bar_ with available commands
 
 ### Routes
-*"/" - GET: Display list of all users 
-*"/blog" - GET: Display list of all blog posts in reverse-chronological order 
-*"/blog?user=username" GET: Display blog entries for specific user 
-*"/blog/newpost" GET & POST: Display form for user to add new post 
-*"/login" GET & POST: Display form for user to log in 
-*"/signup" GET & POST: Display for for user to sign up 
+* **"/"** - GET: Display list of all users 
+* **"/blog"** - GET: Display list of all blog posts in reverse-chronological order 
+* **"/blog?user=username"** - GET: Display blog entries for specific user 
+* **"/blog/newpost"** - GET & POST: Display form for user to add new post 
+* **"/login"** - GET & POST: Display form for user to log in 
+* **"/signup"** - GET & POST: Display for for user to sign up 
