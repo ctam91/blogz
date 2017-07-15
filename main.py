@@ -96,7 +96,7 @@ def login():
     return render_template('login.html')
 
 
-@app.route('/register', methods=['POST', 'GET'])
+@app.route('/signup', methods=['POST', 'GET'])
 def register():
     if request.method == 'POST':
         email = request.form['email']
@@ -116,7 +116,7 @@ def register():
             # TODO - user better response messaging
             return "<h1>Duplicate user</h1>"
 
-    return render_template('register.html')
+    return render_template('signup.html')
 
 @app.route('/logout')
 def logout():
