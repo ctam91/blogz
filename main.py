@@ -89,9 +89,12 @@ def login():
         if user and user.password == password:
             session['email'] = email    
             flash("Logged in")
-            return redirect('/')
-        else:
-            flash('User password incorrect, or user does not exist', 'error')
+            return redirect('/newpost')
+        if user and not user.password:
+            flash('User password incorrect', 'error')
+            return redirect('/login')
+        if not user:
+            flash('User does not exist', 'error')
 
     return render_template('login.html')
 
