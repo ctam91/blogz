@@ -141,7 +141,8 @@ def logout():
 
 @app.route('/')
 def index():
-    return redirect('/blog')
+    authors = User.query.all()
+    return render_template('index.html', authors=authors)
 
 if __name__ == '__main__':
     app.run()
