@@ -34,6 +34,12 @@ class User(db.Model):
         self.email = email
         self.password = password
 
+#user is allowed to visit /login or /register if they are not logged on. If user wants to access a different site and are not logged in, then redirect them to login page ..
+@app.before_request
+def require_login():
+    allowed_routes = ['login', 'register', 'blog', 'index']
+    if request.endpoint not in allowed_routes and 'email' not in session:
+        return redirect('/login')
 
 #create /newpost route and renders add template. If user leaves title or body blank, then return errors. 
 @app.route('/newpost', methods=['POST', 'GET'])
@@ -84,7 +90,7 @@ def login():
         user = User.query.filter_by(email=email).first()
         if user and user.password == password:
             session['email'] = email    
-            flash("Logged in")
+            flash("Logged in",'info')
             return redirect('/newpost')
         if user and not user.password:
             flash('User password incorrect', 'error')
@@ -101,33 +107,35 @@ def register():
         email = request.form['email']
         password = request.form['password']
         verify = request.form['verify']
-
-        if email == "":
-            flash("Please provide an email", "error")
-
-        if password == "":
-            flash("Please provide a password", "error")
-        
-        if password != verify:
-            flash("Passwords do not match")
-
         existing_user = User.query.filter_by(email=email).first()
-        if not existing_user:
+
+        if email == "" or len(email) < 3:
+            flash("Please provide a valid email", "error")
+
+        if password == "" or len(password) < 3:
+            flash("Please provide a valid password. Password must be between 3-20 charcters", "error")
+        
+        if password != verify or verify =="":
+            flash("Passwords do not match", "error")
+
+        if existing_user:
+            flash("Duplicate username", 'error')
+
+        if len(email) > 3 and len(password) > 3 and password==verify and not existing_user: 
             new_user = User(email, password)
             db.session.add(new_user)
             db.session.commit()
             session['email'] = email
             return redirect('/')
         else:
-
-            return "<h1>Duplicate user</h1>"
+            return render_template('signup.html', email=email)
 
     return render_template('signup.html')
 
 @app.route('/logout')
 def logout():
     del session['email']
-    flash('logged out')
+    flash('logged out','info')
     return redirect('/')
 
 
