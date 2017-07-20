@@ -8,7 +8,17 @@
     <div>
         <a class="button" href='/'>Main Blog Page</a>
         <a class="button" href='/newpost'>Add a Blog Entry</a>
+        <a class="button" href="/login">Login</a>
+        <a class="button" href='/logout'>Logout</a>
     </div>
+
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% for category,message in messages %}
+            <p class="{{category}}">{{message}}</p>
+        {% endfor %}
+    {% endwith %}
+
+
     {% block content %}
     {% endblock %}
 
