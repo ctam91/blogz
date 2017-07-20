@@ -7,6 +7,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://blogz:pizza@localhost:8
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
+app.secret_key = 'sunflowerseeds'
 
 #create a Blog class with id, title, body, and owner_id columns. 'owner_id' creates a column that references the 'user id' from User table. The use a a foregin key links the two tables. 
 class Blog(db.Model):
@@ -24,7 +25,7 @@ class Blog(db.Model):
 #create a User class with id, username, password, and blogs columns. 'blogs' links to Blogs table. 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20))
+    email = db.Column(db.String(120), unique=True)
     password = db.Column(db.String(20))
     blogs = db.relationship('Blog', backref='owner')
 
@@ -41,28 +42,23 @@ def newpost():
         title = request.form['title']
         body = request.form['body']
         owner = User.query.filter_by(email=session['email']).first()
-        
-        title_error = ""
-        body_error = ""
 
-        if title == "": 
-            title_error = "Please fill in the title"
-            body = ""
+        if title == "":
+            flash("Please fill in the title", "error")
 
         if body == "":
-            body_error = "Please fill in the body"
-            title = ""
+            flash("Please fill in the body", "error")
             
-        if not title_error and not body_error:   
+        if len(title) > 1 and len(body) > 1:   
             new_post = Blog(title, body, owner) #'owner', not 'owner_id" or 'user' since 'owner' is property of Blog class
             db.session.add(new_post)
             db.session.commit()
             blog_id = str(new_post.id) #grab the id for the record you just created
             return redirect('/blog?id='+blog_id)
         else: 
-            return render_template('add.html', title_error=title_error, body_error=body_error, title=title, body=body)
+            return render_template('newpost.html', title=title, body=body)
         
-    return render_template('add.html')
+    return render_template('newpost.html')
 
 #create /blog route to display blog
 @app.route('/blog', methods=['POST', 'GET'])
@@ -106,7 +102,14 @@ def register():
         password = request.form['password']
         verify = request.form['verify']
 
-        # TODO - validate user's data
+        if email == "":
+            flash("Please provide an email", "error")
+
+        if password == "":
+            flash("Please provide a password", "error")
+        
+        if password != verify:
+            flash("Passwords do not match")
 
         existing_user = User.query.filter_by(email=email).first()
         if not existing_user:
@@ -116,7 +119,7 @@ def register():
             session['email'] = email
             return redirect('/')
         else:
-            # TODO - user better response messaging
+
             return "<h1>Duplicate user</h1>"
 
     return render_template('signup.html')
@@ -124,6 +127,7 @@ def register():
 @app.route('/logout')
 def logout():
     del session['email']
+    flash('logged out')
     return redirect('/')
 
 
