@@ -1,23 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Log in to Write a Blog Entry!</h1>
-<p>If you don't have an account, you may <a href="/signup">Create an Account</a></p>
-<form action="/login" method="post">
-    <table>
-        <tr>
-            <td><label for="email">Email</label></td>
-            <td>
-                <input name="email" type="email" value="{{ email }}">
-            </td>
-        </tr>
-        <tr>
-            <td><label for="password">Password</label></td>
-            <td>
-                <input name="password" type="password">
-            </td>
-        </tr>
-    </table>
-    <input type="submit" value="Login">
-</form>
+    <h1 style="text-align: center;">Build a Blog</h1>
+{% for author in authors %}
+    <p><h2>{{ author.email }}</h2></p></a>
+
+{% endfor %}
+
 {% endblock %}
