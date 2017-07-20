@@ -5,12 +5,13 @@
         <title>My Blog</title>
     </head>
 <body>
-    <div>
-        <a class="button" href='/'>Main Blog Page</a>
-        <a class="button" href='/newpost'>Add a Blog Entry</a>
-        <a class="button" href="/login">Login</a>
-        <a class="button" href='/logout'>Logout</a>
-    </div>
+    <ul>
+        <li><a href='/'>Home</a></li>
+        <li><a href='/'>All Posts</a></li>
+        <li><a href='/newpost'>New Post</a></li>
+        <li class="right"><a href='/logout'>Logout</a></li>
+        <li class="right"><a href="/login">Login</a></li>
+    </ul>
 
     {% with messages = get_flashed_messages(with_categories=True) %}
         {% for category,message in messages %}
