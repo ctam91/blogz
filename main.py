@@ -86,12 +86,12 @@ def blog():
     
     #if blog_id, send your db a query and find the post associated with that id. Render post.html with that post's title and blog
     if blog_id:
-        post = Blog.query.filter_by(id=int(blog_id)).first()
-        return render_template("post.html", title=post.title, body=post.body, user=post.owner.username)
+        post = Blog.query.filter_by(id=blog_id).first()
+        return render_template("post.html", title=post.title, body=post.body, user=post.owner.username, pub_date=post.pub_date, user_id=post.owner_id)
 
     #if user_id, find all Blog objects associated with that owner_id 
     if user_id:
-        entries = Blog.query.filter_by(owner_id=int(user_id)).all()
+        entries = Blog.query.filter_by(owner_id=user_id).all()
         return render_template('user.html', entries=entries)
     
 # If there are no specific posts to retrieve, show entire blog
