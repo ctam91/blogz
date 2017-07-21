@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1 style="text-align: center;">Build a Blog</h1>
-{% for author in authors %}
-    <p><h2>{{ author.email }}</h2></p></a>
+    <h1 style="text-align: center;">Home</h1>
+{% for user in users %}
+    <p><a href="/blog?userId={{user.id}}">{{ user.email }}</a></p>
 
 {% endfor %}
 
