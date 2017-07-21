@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1 style="text-align: center;">Build a Blog</h1>
-{% for title in titles | reverse %}
+    <h1 style="text-align: center;">Blogz</h1>
+{% for title in titles %}
     <a href="/blog?id={{title.id}}"><p><h2>{{ title.title }}</h2></p></a>
     <p>{{ title.body }}</p>
-    <hr>
+    <p>written by <a href="/blog?userId={{title.owner_id}}">{{ title.owner_id }}</a></p>
 
 {% endfor %}
 
