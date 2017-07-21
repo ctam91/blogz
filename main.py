@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 app.config['DEBUG'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://blogz:pizza@localhost:8889/blogz'
-app.config['SQLALCHEMY_ECHO'] = True
+#app.config['SQLALCHEMY_ECHO'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 app.secret_key = 'sunflowerseeds'
@@ -69,13 +69,19 @@ def newpost():
 #create /blog route to display blog
 @app.route('/blog', methods=['POST', 'GET'])
 def blog():
-    #since this is a get request, use request.args.get to retrieve id of blog post
+    #since this is a get request, use request.args.get to retrieve id of blog post and owner 
     blog_id = request.args.get('id')
-
-    #if blog_id exists, send your db a query and find the post associated with that id. Render post.html with that post's title and blog
+    user_id = request.args.get('userId')
+    
+    #if blog_id, send your db a query and find the post associated with that id. Render post.html with that post's title and blog
     if blog_id:
         post = Blog.query.filter_by(id=blog_id).first()
-        return render_template("post.html", title=post.title, body=post.body)
+        return render_template("post.html", title=post.title, body=post.body, user=post.owner_id)
+
+    #if user_id, find all Blog objects associated with that owner_id 
+    if user_id:
+        entries = Blog.query.filter_by(owner_id=int(user_id)).all()
+        return render_template('user.html', entries=entries)
     
 # If there are no specific posts, show entire blog. 
     titles = Blog.query.all()
@@ -141,8 +147,8 @@ def logout():
 
 @app.route('/')
 def index():
-    authors = User.query.all()
-    return render_template('index.html', authors=authors)
+    users = User.query.all()
+    return render_template('index.html', users=users)
 
 if __name__ == '__main__':
     app.run()
