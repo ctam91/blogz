@@ -1,6 +1,8 @@
 from datetime import datetime
 from flask import Flask, request, redirect, render_template, session, flash
 from flask_sqlalchemy import SQLAlchemy
+from hashutils import make_pw_hash, check_pw_hash
+
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
@@ -10,7 +12,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 app.secret_key = 'sunflowerseeds'
 
-#create a Blog class with id, title, body, and owner_id columns. 'owner_id' creates a column that references the 'user id' from User table. The use a a foregin key links the two tables. 
+#create a Blog class with id, title, body, and owner_id columns. A relationship is created between Blog and User tables through usage of foreign key in owner_id(Blog) and blogs(User) properties. 
 class Blog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80))
@@ -18,7 +20,7 @@ class Blog(db.Model):
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     pub_date = db.Column(db.DateTime)
 
-#Creates title, body, and owner properties for Blog class. 
+#iniitalizes title, body, and owner properties for Blog object. 
     def __init__(self, title, body, owner, pub_date=None):
         self.title = title
         self.body = body
@@ -31,13 +33,13 @@ class Blog(db.Model):
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(120), unique=True)
-    password = db.Column(db.String(20))
+    pw_hash = db.Column(db.String(120))
     blogs = db.relationship('Blog', backref='owner')
 
-#Creates username and password properties for User class. 
+#initializes username and hashed password properties for User object. 
     def __init__(self, username, password):
         self.username = username
-        self.password = password
+        self.pw_hash = make_pw_hash(password)
 
 #user is allowed to visit /login, /signup, /blog, and /index if they are not logged on. If user wants to access a different site and are not logged in, then redirect them to login page ..
 @app.before_request
@@ -82,7 +84,7 @@ def blog():
     '''
     #retrieve id of blog post and owner from the url 
     blog_id = request.args.get('id')
-    user_id = request.args.get('userId')
+    user_id = request.args.get('userid')
     
     #if blog_id, send your db a query and find the post associated with that id. Render post.html with that post's title and blog
     if blog_id:
@@ -109,7 +111,7 @@ def login():
         password = request.form['password']
         user = User.query.filter_by(username=username).first()
 
-        if user and user.password == password:
+        if user and check_pw_hash(password, user.pw_hash):
             session['username'] = username   
             flash("Logged in",'info')
             return redirect('/newpost')
