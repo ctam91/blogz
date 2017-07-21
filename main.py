@@ -76,7 +76,7 @@ def blog():
     #if blog_id, send your db a query and find the post associated with that id. Render post.html with that post's title and blog
     if blog_id:
         post = Blog.query.filter_by(id=blog_id).first()
-        return render_template("post.html", title=post.title, body=post.body, user=post.owner_id)
+        return render_template("post.html", title=post.title, body=post.body, user=post.owner.email)
 
     #if user_id, find all Blog objects associated with that owner_id 
     if user_id:
@@ -98,11 +98,11 @@ def login():
             session['email'] = email    
             flash("Logged in",'info')
             return redirect('/newpost')
-        if user and not user.password:
+        if user and user.password != password:
             flash('User password incorrect', 'error')
-            return redirect('/login')
         if not user:
             flash('User does not exist', 'error')
+        return render_template('login.html', email=email)
 
     return render_template('login.html')
 

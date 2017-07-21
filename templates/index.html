@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1 style="text-align: center;">Home</h1>
+    <h1 style="text-align: center;">Blog Users</h1>
 {% for user in users %}
     <p><a href="/blog?userId={{user.id}}">{{ user.email }}</a></p>
 
