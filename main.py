@@ -12,7 +12,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 app.secret_key = 'sunflowerseeds'
 
-#create a Blog class with id, title, body, and owner_id columns. A relationship is created between Blog and User tables through usage of foreign key in owner_id(Blog) and blogs(User) properties. 
+# Create a Blog class with id, title, body, and owner_id columns. A relationship is created between Blog and User tables through usage of foreign key in owner_id(Blog) and blogs(User) properties. 
 class Blog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80))
@@ -20,7 +20,7 @@ class Blog(db.Model):
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     pub_date = db.Column(db.DateTime)
 
-#iniitalizes title, body, and owner properties for Blog object. 
+# Iniitaliz title, body, and owner properties for Blog object. 
     def __init__(self, title, body, owner, pub_date=None):
         self.title = title
         self.body = body
@@ -36,19 +36,19 @@ class User(db.Model):
     pw_hash = db.Column(db.String(120))
     blogs = db.relationship('Blog', backref='owner')
 
-#initializes username and hashed password properties for User object. 
+# Initialize username and hashed password properties for User object. 
     def __init__(self, username, password):
         self.username = username
         self.pw_hash = make_pw_hash(password)
 
-#user is allowed to visit /login, /signup, /blog, and /index if they are not logged on. If user wants to access a different site and are not logged in, then redirect them to login page ..
+# User is allowed to visit /login, /signup, /blog, /index, and static folder items if they are not logged on. If user wants to access a different site and are not logged in, then redirect them to login page ..
 @app.before_request
 def require_login():
-    allowed_routes = ['login', 'signup', 'blog', 'index']
+    allowed_routes = ['login', 'signup', 'blog', 'index','static']
     if request.endpoint not in allowed_routes and 'username' not in session:
         return redirect('/login')
 
-#create /newpost route and renders add template. If user leaves title or body blank, then return errors. 
+# Create /newpost route and renders add template. If user leaves title or body blank, then return errors. 
 @app.route('/newpost', methods=['POST', 'GET'])
 def newpost():
     '''
@@ -76,36 +76,37 @@ def newpost():
         
     return render_template('newpost.html')
 
-#create /blog route to display blog
+# Create /blog route to display blog
 @app.route('/blog', methods=['POST', 'GET'])
 def blog():
     '''
     Show all blog entries
     '''
-    #retrieve id of blog post and owner from the url 
+    # Retrieve id of blog post and owner from the url 
     blog_id = request.args.get('id')
     user_id = request.args.get('userid')
     
-    #if blog_id, send your db a query and find the post associated with that id. Render post.html with that post's title and blog
+    # If a blog_id is retrieved from the url, send your db a query and find the post associated with that id. Render post.html with that post's title and blog
     if blog_id:
         post = Blog.query.filter_by(id=blog_id).first()
         return render_template("post.html", title=post.title, body=post.body, user=post.owner.username, pub_date=post.pub_date, user_id=post.owner_id)
 
-    #if user_id, find all Blog objects associated with that owner_id 
+    # If a user_id is retrieved from the url, find all Blog objects associated with that owner_id 
     if user_id:
         entries = Blog.query.filter_by(owner_id=user_id).all()
         return render_template('user.html', entries=entries)
     
-# If there are no specific posts to retrieve, show entire blog
+    # If there are no specific posts to retrieve, show entire blog
     titles = Blog.query.all()
     return render_template('blog.html',titles=titles)
 
+# Create /login route to allow user to login 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     '''
     Shows login page and login form
     '''
-    # if it is a post method, the user is trying to login and we need to verify email, password, and if user exists in database
+    # If it is a post method, the user is trying to login and we need to verify email, password, and if user exists in database
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -132,7 +133,7 @@ def login():
 
     return render_template('login.html')
 
-
+# Create /signup route for users to sign up. Return errors if form is filled out incorrectly.
 @app.route('/signup', methods=['POST', 'GET'])
 def signup():
     '''
@@ -167,16 +168,17 @@ def signup():
 
     return render_template('signup.html')
 
+# Logs user out and deletes their session
 @app.route('/logout')
 def logout():
     '''
     Deletes session and logs user out
     '''
     del session['username']
-    flash('logged out','info')
+    flash('Logged out','info')
     return redirect('/')
 
-
+# Index route displays all users
 @app.route('/')
 def index():
     '''
