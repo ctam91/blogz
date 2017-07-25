@@ -120,7 +120,7 @@ def login():
         if username == "" and password == "":
             flash('Please enter a username and password','error')
 
-        if user and user.password != password:
+        if user and user.pw_hash != password:
             flash('User password incorrect', 'error')
 
         if not user and len(password) > 1:
