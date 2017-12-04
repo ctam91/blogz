@@ -1,22 +1,10 @@
-<<<<<<< HEAD
-=======
-
-.error{
-    color: red; 
-    font-style: italic;
-}
-
->>>>>>> a9b976b4d558ab693c4ba5fe428cc55e1be9b411
 .info {
     color: green; 
 }
 
-<<<<<<< HEAD
 .error {
     color: red; 
 }
-=======
->>>>>>> a9b976b4d558ab693c4ba5fe428cc55e1be9b411
 .button{
     padding-right: 1em;
 }
@@ -43,6 +31,10 @@ li a {
 
 li a:hover {
     background-color: #111;
+}
+
+p{
+    margin: 10px;
 }
 
 .right{
