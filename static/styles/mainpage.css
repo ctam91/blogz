@@ -33,9 +33,11 @@ li a:hover {
     background-color: #111;
 }
 
-p{
-    margin: 10px;
+form{
+  color:black;
+  width:100%;
 }
+
 
 .right{
     float: right; 
@@ -44,4 +46,10 @@ p{
 .user {
     font-style: italic;
     font-size: .8em; 
+}
+
+.blog_title{
+    width: 50%;
+    max-width: 50%;
+    margin-bottom: 10px;
 }

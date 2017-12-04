@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="container">
     <h2>{{ title }}</h2>
     <p>{{ body }}</p>
     <p>{{ pub_date }}</p>
     <p class='user'>written by <a href="/blog?userid={{user_id}}">{{ user }}</a></p>
-    
+</div>    
 {% endblock %}

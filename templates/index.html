@@ -3,8 +3,9 @@
 {% block content %}
     <h1 style="text-align: center;">Blog Users</h1>
 {% for user in users %}
+<div class="container">
     <p><a href="/blog?userid={{user.id}}">{{ user.username }}</a></p>
-
+</div>
 {% endfor %}
 
 {% endblock %}
