@@ -6,7 +6,7 @@ from hashutils import make_pw_hash, check_pw_hash
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://blogs:pizza@localhost:8889/blogs'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://ubtelxojfpeoiv:119700ff425c9c569b31db163a742807d1a99d328b69b886a8c0e073c30730ad@ec2-50-16-250-215.compute-1.amazonaws.com:5432/des5akillppneq'
 #app.config['SQLALCHEMY_ECHO'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
