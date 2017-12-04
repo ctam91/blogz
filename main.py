@@ -114,7 +114,7 @@ def login():
 
         if user and check_pw_hash(password, user.pw_hash):
             session['username'] = username   
-            flash("Logged in",'info')
+            flash("Successfully logged in",'info')
             return redirect('/newpost')
 
         if username == "" and password == "":
@@ -175,7 +175,7 @@ def logout():
     Deletes session and logs user out
     '''
     del session['username']
-    flash('Logged out','info')
+    flash('Successfully logged out','info')
     return redirect('/')
 
 # Index route displays all users
